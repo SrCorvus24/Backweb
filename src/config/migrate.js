@@ -20,6 +20,33 @@ const schema = [
       { name: 'created_at', def: 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP' },
     ],
   },
+  {
+    table: 'productos',
+    create: `
+      CREATE TABLE IF NOT EXISTS productos (
+        id SERIAL PRIMARY KEY,
+        nombre VARCHAR(150) NOT NULL,
+        unidad VARCHAR(20) NOT NULL,
+        stock_minimo NUMERIC(12,2) DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `,
+    columns: [],
+  },
+  {
+    table: 'lotes',
+    create: `
+      CREATE TABLE IF NOT EXISTS lotes (
+        id SERIAL PRIMARY KEY,
+        producto_id INTEGER NOT NULL REFERENCES productos(id),
+        cantidad_inicial NUMERIC(12,2) NOT NULL,
+        cantidad_disponible NUMERIC(12,2) NOT NULL,
+        costo_unitario NUMERIC(14,2) NOT NULL,
+        fecha_entrada TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `,
+    columns: [],
+  },
 ];
 
 async function runMigrations() {
