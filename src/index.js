@@ -5,6 +5,7 @@ const swaggerSpec = require('./config/swagger');
 const runMigrations = require('./config/migrate');
 const userRoutes = require('./routes/user.routes');
 const productoRoutes = require('./routes/producto.routes');
+const loteRoutes = require('./routes/lote.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api/users', userRoutes);
 app.use('/api/productos', productoRoutes);
+app.use('/api/lotes', loteRoutes);
 
 app.get('/', (req, res) => {
   res.json({ message: 'API corriendo', docs: '/api-docs' });
