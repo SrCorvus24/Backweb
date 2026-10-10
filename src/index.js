@@ -6,6 +6,7 @@ const swaggerSpec = require('./config/swagger');
 const runMigrations = require('./config/migrate');
 const userRoutes = require('./routes/user.routes');
 const productoRoutes = require('./routes/producto.routes');
+const varianteRoutes = require('./routes/variante.routes');
 const loteRoutes = require('./routes/lote.routes');
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(cors({ origin: 'http://localhost:5173' }));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api/users', userRoutes);
 app.use('/api/productos', productoRoutes);
+app.use('/api/variantes', varianteRoutes);
 app.use('/api/lotes', loteRoutes);
 
 app.get('/', (req, res) => {
