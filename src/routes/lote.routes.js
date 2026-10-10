@@ -7,7 +7,7 @@ const router = Router();
  * @swagger
  * /api/lotes:
  *   post:
- *     summary: Registrar entrada de mercancía (nuevo lote)
+ *     summary: Registrar entrada de mercancía (nuevo lote de una talla)
  *     tags: [Lotes]
  *     requestBody:
  *       required: true
@@ -15,35 +15,37 @@ const router = Router();
  *         application/json:
  *           schema:
  *             type: object
- *             required: [producto_id, cantidad, costo_unitario]
+ *             required: [variante_id, cantidad, costo_unitario]
  *             properties:
- *               producto_id:
+ *               variante_id:
  *                 type: integer
  *                 example: 1
  *               cantidad:
- *                 type: number
+ *                 type: integer
  *                 example: 10
  *               costo_unitario:
  *                 type: number
- *                 example: 20000
+ *                 example: 45000
  *     responses:
  *       201:
  *         description: Lote creado
- * /api/lotes/producto/{productoId}:
+ *       404:
+ *         description: La talla no existe
+ * /api/lotes/variante/{varianteId}:
  *   get:
- *     summary: Ver lotes de un producto
+ *     summary: Ver los lotes de una talla (del más antiguo al más nuevo)
  *     tags: [Lotes]
  *     parameters:
  *       - in: path
- *         name: productoId
+ *         name: varianteId
  *         required: true
  *         schema:
  *           type: integer
  *     responses:
  *       200:
- *         description: Lista de lotes (del más viejo al más nuevo)
+ *         description: Lista de lotes en orden PEPS
  */
 router.post('/', LoteController.create);
-router.get('/producto/:productoId', LoteController.getByProducto);
+router.get('/variante/:varianteId', LoteController.getByVariante);
 
 module.exports = router;
