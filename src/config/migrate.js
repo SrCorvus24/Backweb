@@ -1,6 +1,5 @@
 const pool = require('./db');
 
-// Agrega columnas aquí para que se creen automáticamente al arrancar
 const schema = [
   {
     table: 'users',
@@ -26,9 +25,25 @@ const schema = [
       CREATE TABLE IF NOT EXISTS productos (
         id SERIAL PRIMARY KEY,
         nombre VARCHAR(150) NOT NULL,
-        unidad VARCHAR(20) NOT NULL,
-        stock_minimo NUMERIC(12,2) DEFAULT 0,
+        categoria VARCHAR(50) NOT NULL,
+        precio NUMERIC(14,2) NOT NULL CHECK (precio > 0),
+        tiempo_entrega_dias INTEGER NOT NULL DEFAULT 3,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `,
+    columns: [],
+  },
+  {
+    table: 'variantes',
+    create: `
+      CREATE TABLE IF NOT EXISTS variantes (
+        id SERIAL PRIMARY KEY,
+        producto_id INTEGER NOT NULL REFERENCES productos(id),
+        talla VARCHAR(10) NOT NULL,
+        sku VARCHAR(40) UNIQUE NOT NULL,
+        stock_minimo INTEGER NOT NULL DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE (producto_id, talla)
       )
     `,
     columns: [],
@@ -38,10 +53,10 @@ const schema = [
     create: `
       CREATE TABLE IF NOT EXISTS lotes (
         id SERIAL PRIMARY KEY,
-        producto_id INTEGER NOT NULL REFERENCES productos(id),
-        cantidad_inicial NUMERIC(12,2) NOT NULL,
-        cantidad_disponible NUMERIC(12,2) NOT NULL,
-        costo_unitario NUMERIC(14,2) NOT NULL,
+        variante_id INTEGER NOT NULL REFERENCES variantes(id),
+        cantidad_inicial INTEGER NOT NULL CHECK (cantidad_inicial > 0),
+        cantidad_disponible INTEGER NOT NULL CHECK (cantidad_disponible >= 0),
+        costo_unitario NUMERIC(14,2) NOT NULL CHECK (costo_unitario > 0),
         fecha_entrada TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `,

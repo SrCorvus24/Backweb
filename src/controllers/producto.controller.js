@@ -12,11 +12,14 @@ const ProductoController = {
 
   async create(req, res) {
     try {
-      const { nombre, unidad, stock_minimo } = req.body;
-      if (!nombre || !unidad) {
-        return res.status(400).json({ success: false, message: 'nombre y unidad son requeridos' });
+      const { nombre, categoria, precio, tiempo_entrega_dias } = req.body;
+      if (!nombre || !categoria || !precio) {
+        return res.status(400).json({ success: false, message: 'nombre, categoria y precio son requeridos' });
       }
-      const producto = await ProductoModel.create({ nombre, unidad, stock_minimo: stock_minimo || 0 });
+      if (precio <= 0) {
+        return res.status(400).json({ success: false, message: 'el precio debe ser mayor a 0' });
+      }
+      const producto = await ProductoModel.create({ nombre, categoria, precio, tiempo_entrega_dias });
       res.status(201).json({ success: true, data: producto });
     } catch (err) {
       res.status(500).json({ success: false, message: err.message });

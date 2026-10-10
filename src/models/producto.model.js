@@ -8,10 +8,11 @@ const ProductoModel = {
     return rows;
   },
 
-  async create({ nombre, unidad, stock_minimo }) {
+  async create({ nombre, categoria, precio, tiempo_entrega_dias }) {
     const { rows } = await pool.query(
-      'INSERT INTO productos (nombre, unidad, stock_minimo) VALUES ($1, $2, $3) RETURNING *',
-      [nombre, unidad, stock_minimo]
+      `INSERT INTO productos (nombre, categoria, precio, tiempo_entrega_dias)
+       VALUES ($1, $2, $3, COALESCE($4, 3)) RETURNING *`,
+      [nombre, categoria, precio, tiempo_entrega_dias]
     );
     return rows[0];
   },
