@@ -62,6 +62,21 @@ const schema = [
     `,
     columns: [],
   },
+  {
+    table: 'movimientos',
+    create: `
+      CREATE TABLE IF NOT EXISTS movimientos (
+        id SERIAL PRIMARY KEY,
+        variante_id INTEGER NOT NULL REFERENCES variantes(id),
+        lote_id INTEGER NOT NULL REFERENCES lotes(id),
+        tipo VARCHAR(10) NOT NULL CHECK (tipo IN ('ENTRADA', 'SALIDA')),
+        cantidad INTEGER NOT NULL CHECK (cantidad > 0),
+        costo_unitario NUMERIC(14,2) NOT NULL,
+        fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `,
+    columns: [],
+  },
 ];
 
 async function runMigrations() {
