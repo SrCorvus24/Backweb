@@ -8,7 +8,8 @@ const userRoutes = require('./routes/user.routes');
 const productoRoutes = require('./routes/producto.routes');
 const varianteRoutes = require('./routes/variante.routes');
 const loteRoutes = require('./routes/lote.routes');
-const salidaRoutes = require('./routes/salida.routes'); // NUEVO
+const salidaRoutes = require('./routes/salida.routes');
+const movimientoRoutes = require('./routes/movimiento.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,7 +22,8 @@ app.use('/api/users', userRoutes);
 app.use('/api/productos', productoRoutes);
 app.use('/api/variantes', varianteRoutes);
 app.use('/api/lotes', loteRoutes);
-app.use('/api/salidas', salidaRoutes); // NUEVO
+app.use('/api/salidas', salidaRoutes);
+app.use('/api/movimientos', movimientoRoutes);
 
 app.get('/', (req, res) => {
   res.json({ message: 'API corriendo', docs: '/api-docs' });
