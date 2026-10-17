@@ -10,6 +10,7 @@ const varianteRoutes = require('./routes/variante.routes');
 const loteRoutes = require('./routes/lote.routes');
 const salidaRoutes = require('./routes/salida.routes');
 const movimientoRoutes = require('./routes/movimiento.routes');
+const reordenRoutes = require('./routes/reorden.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -24,6 +25,7 @@ app.use('/api/variantes', varianteRoutes);
 app.use('/api/lotes', loteRoutes);
 app.use('/api/salidas', salidaRoutes);
 app.use('/api/movimientos', movimientoRoutes);
+app.use('/api/reorden', reordenRoutes);
 
 app.get('/', (req, res) => {
   res.json({ message: 'API corriendo', docs: '/api-docs' });
