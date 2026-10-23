@@ -5,6 +5,17 @@ const router = express.Router();
 
 /**
  * @swagger
+ * /api/reorden/alertas:
+ *   get:
+ *     summary: Tallas que necesitan reorden (stock en o bajo el punto de reorden)
+ *     tags: [Reorden]
+ *     responses:
+ *       200: { description: Lista de tallas por pedir }
+ */
+router.get('/alertas', reordenController.getAlertas);
+
+/**
+ * @swagger
  * /api/reorden/variante/{varianteId}:
  *   get:
  *     summary: Punto de reorden y stock de seguridad de una talla (últimos 30 días)

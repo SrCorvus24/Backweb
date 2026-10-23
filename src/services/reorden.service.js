@@ -67,4 +67,19 @@ async function reordenPorVariante(variante_id) {
   };
 }
 
-module.exports = { calcularReorden, reordenPorVariante };
+// reviso todas las tallas y devuelvo solo las que hay que pedir
+async function alertas() {
+  const { rows } = await pool.query('SELECT id FROM variantes ORDER BY id');
+  const lista = [];
+
+  for (const v of rows) {
+    const r = await reordenPorVariante(v.id);
+    if (r.necesita_reorden) {
+      lista.push(r);
+    }
+  }
+
+  return lista;
+}
+
+module.exports = { calcularReorden, reordenPorVariante, alertas };

@@ -9,6 +9,15 @@ const reordenController = {
       res.status(err.status || 500).json({ success: false, message: err.message });
     }
   },
+
+  async getAlertas(req, res) {
+    try {
+      const lista = await reordenService.alertas();
+      res.json({ success: true, data: lista });
+    } catch (err) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  },
 };
 
 module.exports = reordenController;
