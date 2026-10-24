@@ -1,5 +1,6 @@
 const express = require('express');
 const salidaController = require('../controllers/salida.controller');
+const { permitirRoles } = require('../middlewares/auth.middleware');
 
 const router = express.Router();
 
@@ -24,6 +25,6 @@ const router = express.Router();
  *       400: { description: Datos inválidos }
  *       409: { description: Stock insuficiente }
  */
-router.post('/', salidaController.create);
+router.post('/', permitirRoles('ADMINISTRADOR', 'ALMACENISTA'), salidaController.create);
 
 module.exports = router;

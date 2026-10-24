@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const ProductoController = require('../controllers/producto.controller');
+const { permitirRoles } = require('../middlewares/auth.middleware');
 
 const router = Router();
 
@@ -40,6 +41,6 @@ const router = Router();
  *         description: Prenda creada
  */
 router.get('/', ProductoController.getAll);
-router.post('/', ProductoController.create);
+router.post('/', permitirRoles('ADMINISTRADOR'), ProductoController.create);
 
 module.exports = router;

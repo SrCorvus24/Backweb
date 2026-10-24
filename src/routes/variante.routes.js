@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const VarianteController = require('../controllers/variante.controller');
+const { permitirRoles } = require('../middlewares/auth.middleware');
 
 const router = Router();
 
@@ -48,7 +49,7 @@ const router = Router();
  *       200:
  *         description: Lista de tallas con stock calculado
  */
-router.post('/', VarianteController.create);
+router.post('/', permitirRoles('ADMINISTRADOR'), VarianteController.create);
 router.get('/producto/:productoId', VarianteController.getByProducto);
 
 module.exports = router;

@@ -9,6 +9,7 @@ const schema = [
         name VARCHAR(100) NOT NULL,
         email VARCHAR(150) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL,
+        rol VARCHAR(20) NOT NULL DEFAULT 'CONSULTA',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `,
@@ -16,8 +17,24 @@ const schema = [
       { name: 'name',       def: 'VARCHAR(100) NOT NULL' },
       { name: 'email',      def: 'VARCHAR(150)' },
       { name: 'password',   def: 'VARCHAR(255) NOT NULL' },
+      { name: 'rol',        def: "VARCHAR(20) NOT NULL DEFAULT 'CONSULTA'" },
       { name: 'created_at', def: 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP' },
     ],
+  },
+  {
+    // cada inicio de sesión guarda aquí la huella de su refresh token
+    table: 'sesiones',
+    create: `
+      CREATE TABLE IF NOT EXISTS sesiones (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        token_hash VARCHAR(64) UNIQUE NOT NULL,
+        expira TIMESTAMP NOT NULL,
+        revocado BOOLEAN NOT NULL DEFAULT false,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `,
+    columns: [],
   },
   {
     table: 'productos',

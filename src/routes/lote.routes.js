@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const LoteController = require('../controllers/lote.controller');
+const { permitirRoles } = require('../middlewares/auth.middleware');
 
 const router = Router();
 
@@ -45,7 +46,7 @@ const router = Router();
  *       200:
  *         description: Lista de lotes en orden PEPS
  */
-router.post('/', LoteController.create);
+router.post('/', permitirRoles('ADMINISTRADOR', 'ALMACENISTA'), LoteController.create);
 router.get('/variante/:varianteId', LoteController.getByVariante);
 
 module.exports = router;

@@ -1,5 +1,7 @@
 const UserModel = require('../models/user.model');
 
+const ROLES = ['ADMINISTRADOR', 'ALMACENISTA', 'CONSULTA'];
+
 const UserController = {
   async getAll(req, res) {
     try {
@@ -22,9 +24,12 @@ const UserController = {
 
   async create(req, res) {
     try {
-      const { name, email, password } = req.body;
+      const { name, email, password, rol } = req.body;
       if (!name || !email || !password) {
         return res.status(400).json({ success: false, message: 'name, email y password son requeridos' });
+      }
+      if (rol && !ROLES.includes(rol)) {
+        return res.status(400).json({ success: false, message: 'el rol debe ser ADMINISTRADOR, ALMACENISTA o CONSULTA' });
       }
 
       const existing = await UserModel.findByEmail(email);
@@ -32,7 +37,7 @@ const UserController = {
         return res.status(409).json({ success: false, message: 'El email ya está registrado' });
       }
 
-      const user = await UserModel.create({ name, email, password });
+      const user = await UserModel.create({ name, email, password, rol });
       res.status(201).json({ success: true, data: user });
     } catch (err) {
       res.status(500).json({ success: false, message: err.message });
@@ -41,12 +46,15 @@ const UserController = {
 
   async update(req, res) {
     try {
-      const { name, email } = req.body;
+      const { name, email, rol } = req.body;
       if (!name || !email) {
         return res.status(400).json({ success: false, message: 'name y email son requeridos' });
       }
+      if (rol && !ROLES.includes(rol)) {
+        return res.status(400).json({ success: false, message: 'el rol debe ser ADMINISTRADOR, ALMACENISTA o CONSULTA' });
+      }
 
-      const user = await UserModel.update(req.params.id, { name, email });
+      const user = await UserModel.update(req.params.id, { name, email, rol });
       if (!user) return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
       res.json({ success: true, data: user });
     } catch (err) {
