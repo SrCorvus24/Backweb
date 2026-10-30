@@ -8,6 +8,13 @@ const options = {
       version: '1.0.0',
       description: 'API REST con Express y PostgreSQL',
     },
+    // botón "Authorize" de Swagger: pego ahí el access token para probar las rutas protegidas
+    components: {
+      securitySchemes: {
+        bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      },
+    },
+    security: [{ bearerAuth: [] }],
     servers: [
       {
         url: `http://localhost:${process.env.PORT || 3000}`,
