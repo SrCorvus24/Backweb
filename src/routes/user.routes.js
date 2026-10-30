@@ -1,7 +1,11 @@
 const { Router } = require('express');
 const UserController = require('../controllers/user.controller');
+const { permitirRoles } = require('../middlewares/auth.middleware');
 
 const router = Router();
+
+// solo el administrador puede ver y manejar usuarios
+router.use(permitirRoles('ADMINISTRADOR'));
 
 /**
  * @swagger
@@ -19,6 +23,9 @@ const router = Router();
  *         email:
  *           type: string
  *           example: juan@example.com
+ *         rol:
+ *           type: string
+ *           example: CONSULTA
  *         created_at:
  *           type: string
  *           format: date-time
@@ -38,6 +45,10 @@ const router = Router();
  *         password:
  *           type: string
  *           example: secreto123
+ *         rol:
+ *           type: string
+ *           enum: [ADMINISTRADOR, ALMACENISTA, CONSULTA]
+ *           example: ALMACENISTA
  *     UserUpdate:
  *       type: object
  *       required:
