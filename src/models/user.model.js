@@ -4,14 +4,14 @@ const bcrypt = require('bcryptjs');
 const UserModel = {
   async findAll() {
     const { rows } = await pool.query(
-      'SELECT id, name, email, created_at FROM users ORDER BY id'
+      'SELECT id, name, email, rol, created_at FROM users ORDER BY id'
     );
     return rows;
   },
 
   async findById(id) {
     const { rows } = await pool.query(
-      'SELECT id, name, email, created_at FROM users WHERE id = $1',
+      'SELECT id, name, email, rol, created_at FROM users WHERE id = $1',
       [id]
     );
     return rows[0] || null;
@@ -25,19 +25,21 @@ const UserModel = {
     return rows[0] || null;
   },
 
-  async create({ name, email, password }) {
+  async create({ name, email, password, rol }) {
     const hashed = await bcrypt.hash(password, 10);
     const { rows } = await pool.query(
-      'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id, name, email, created_at',
-      [name, email, hashed]
+      `INSERT INTO users (name, email, password, rol) VALUES ($1, $2, $3, COALESCE($4, 'CONSULTA'))
+       RETURNING id, name, email, rol, created_at`,
+      [name, email, hashed, rol]
     );
     return rows[0];
   },
 
-  async update(id, { name, email }) {
+  async update(id, { name, email, rol }) {
     const { rows } = await pool.query(
-      'UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING id, name, email, created_at',
-      [name, email, id]
+      `UPDATE users SET name = $1, email = $2, rol = COALESCE($3, rol) WHERE id = $4
+       RETURNING id, name, email, rol, created_at`,
+      [name, email, rol, id]
     );
     return rows[0] || null;
   },
