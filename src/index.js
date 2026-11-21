@@ -4,6 +4,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const logs = require('./middlewares/logs.middleware');
+const { noEncontrado, manejarErrores } = require('./middlewares/errores.middleware');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
 const runMigrations = require('./config/migrate');
@@ -53,6 +54,10 @@ app.use('/api/reorden', verificarToken, reordenRoutes);
 app.get('/', (req, res) => {
   res.json({ message: 'API corriendo', docs: '/api-docs' });
 });
+
+// si nada respondio antes, la ruta no existe o hubo un error
+app.use(noEncontrado);
+app.use(manejarErrores);
 
 async function start() {
   try {
