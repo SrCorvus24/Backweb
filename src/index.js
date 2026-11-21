@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
+const logs = require('./middlewares/logs.middleware');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
 const runMigrations = require('./config/migrate');
@@ -19,6 +20,7 @@ const reordenRoutes = require('./routes/reorden.routes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(logs); // cada peticion queda en consola con su id
 app.use(express.json());
 app.use(cookieParser()); // para leer la cookie del refresh token
 app.use(cors({
