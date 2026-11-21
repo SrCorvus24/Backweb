@@ -16,6 +16,10 @@ const ProductoController = {
       if (!nombre || !categoria || !precio) {
         return res.status(400).json({ success: false, message: 'nombre, categoria y precio son requeridos' });
       }
+      // el nombre debe tener minimo 3 letras
+      if (nombre.trim().length < 3) {
+        return res.status(400).json({ success: false, message: 'el nombre debe tener minimo 3 letras' });
+      }
       if (precio <= 0) {
         return res.status(400).json({ success: false, message: 'el precio debe ser mayor a 0' });
       }
